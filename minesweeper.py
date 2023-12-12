@@ -1,3 +1,6 @@
+#https://cs50.harvard.edu/ai/2023/projects/1/minesweeper/
+#https://www.youtube.com/watch?v=HWQLez87vqM
+
 import itertools
 import random
 
@@ -105,27 +108,29 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
-        raise NotImplementedError
+        for x in self.cells:
+            print(x)
+        return self.cells
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
-        raise NotImplementedError
+        return self.cells
 
     def mark_mine(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
-        raise NotImplementedError
+        return self.cells(cell)
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-        raise NotImplementedError
+        return self.cells(cell)
 
 
 class MinesweeperAI():
@@ -154,6 +159,11 @@ class MinesweeperAI():
         Marks a cell as a mine, and updates all knowledge
         to mark that cell as a mine as well.
         """
+        print('mark_mine cell: ', cell)
+        print(self.moves_made)
+        print(self.mines)
+        print(self.safes)
+        print(self.knowledge)
         self.mines.add(cell)
         for sentence in self.knowledge:
             sentence.mark_mine(cell)
@@ -163,6 +173,11 @@ class MinesweeperAI():
         Marks a cell as safe, and updates all knowledge
         to mark that cell as safe as well.
         """
+        print('mark safe cell: ', cell)
+        print(self.moves_made)
+        print(self.mines)
+        print(self.safes)
+        print(self.knowledge)
         self.safes.add(cell)
         for sentence in self.knowledge:
             sentence.mark_safe(cell)
@@ -182,7 +197,52 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-        raise NotImplementedError
+        print('add knowledge cell: ', cell)
+        print(self.moves_made)
+        print(self.mines)
+        print(self.safes)
+        print(self.knowledge)
+        self.moves_made.add(cell)
+        self.safes.add(cell)
+        
+        # (2,4) = (y,x) idk who wrote this map :) 
+
+        # if the cell is not on the border
+        if cell[0] != 0 and cell[1] != 0 and cell[0] != self.height-1 and cell[1] != self.width-1:
+            self.knowledge.append(({(cell[0]-1,cell[1]-1),(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]-1),(cell[0],cell[1]+1),(cell[0]+1,cell[1]-1),(cell[0]+1,cell[1]),(cell[0]+1,cell[1]+1)},count))
+        
+        # if the cell is in the top left corner
+        if cell[0] == 0 and cell[1] == 0:
+            self.knowledge.append(({(cell[0]+1,cell[1]),(cell[0]+1,cell[1]+1),(cell[0],cell[1]+1)},count))
+
+        # if the cell is in the top right corner
+        if cell[0] == 0 and cell[1] == self.width-1:
+            self.knowledge.append(({(cell[0]+1,cell[1]),(cell[0]+1,cell[1]-1),(cell[0],cell[1]-1)},count))
+
+        # if the cell is in the bottom left corner
+        if cell[0] == self.height-1 and cell[1] == 0:
+            self.knowledge.append(({(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]+1)},count))
+
+        # if the cell is in the bottom right corner
+        if cell[0] == self.height-1 and cell[1] == self.width-1:
+            self.knowledge.append(({(cell[0],cell[1]-1),(cell[0]-1,cell[1]-1),(cell[0]-1,cell[1])},count))
+
+        # if the cell is on the left border 
+        if cell[1] == 0 and cell[0] != 0 and cell[0] != self.height-1:
+            self.knowledge.append(({(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]+1),(cell[0]+1,cell[1]+1),(cell[0]+1,cell[1])},count))
+
+         # if the cell is on the right border 
+        if cell[1] == self.width-1 and cell[0] != 0 and cell[0] != self.height-1:
+            self.knowledge.append(({(cell[0]-1,cell[1]),(cell[0]-1,cell[1]-1),(cell[0],cell[1]-1),(cell[0]-1,cell[1]),(cell[0]+1,cell[1])},count))
+
+        # if the cell is on the top border 
+        if cell[0] == 0 and cell[1] != self.width-1 and cell[1] != 0:
+            self.knowledge.append(({(cell[0],cell[1]-1),(cell[0]+1,cell[1]-1),(cell[0]+1,cell[1]),(cell[0]+1,cell[1]+1),(cell[0],cell[1]+1)},count))
+
+        # if the cell is on the bottom border 
+        if cell[0] == self.height-1 and cell[1] != 0 and cell[1] != self.width-1:
+            self.knowledge.append(({(cell[0],cell[1]-1),(cell[0]-1,cell[1]-1),(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]+1)},count))
+        return True
 
     def make_safe_move(self):
         """
@@ -193,7 +253,11 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        raise NotImplementedError
+        print(self.moves_made)
+        print(self.mines)
+        print(self.safes)
+        print(self.knowledge)
+        return True
 
     def make_random_move(self):
         """
@@ -202,4 +266,8 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        raise NotImplementedError
+        print(self.moves_made)
+        print(self.mines)
+        print(self.safes)
+        print(self.knowledge)
+        return True

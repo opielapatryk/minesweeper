@@ -128,12 +128,10 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-        print('add knowledge cell: ', cell)
-        print('moves_made: ',self.moves_made)
-        print('mines: ',self.mines)
-        print('safes: ',self.safes)
-        print('knowledge: ',self.knowledge)
+
+        # 1) mark the cell as a move that has been made
         self.moves_made.add(cell)
+        # 2) mark the cell as safe
         self.safes.add(cell)
         
         # (2,4) = (y,x) idk who wrote this map :) 
@@ -141,38 +139,92 @@ class MinesweeperAI():
         # if the cell is not on the border
         if cell[0] != 0 and cell[1] != 0 and cell[0] != self.height-1 and cell[1] != self.width-1:
             self.knowledge.append(({(cell[0]-1,cell[1]-1),(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]-1),(cell[0],cell[1]+1),(cell[0]+1,cell[1]-1),(cell[0]+1,cell[1]),(cell[0]+1,cell[1]+1)},count))
-        
+            if count == 0:
+                self.safes.add((cell[0]-1,cell[1]-1))
+                self.safes.add((cell[0]-1,cell[1]))
+                self.safes.add((cell[0]-1,cell[1]+1))
+                self.safes.add((cell[0],cell[1]-1))
+                self.safes.add((cell[0],cell[1]+1))
+                self.safes.add((cell[0]+1,cell[1]-1))
+                self.safes.add((cell[0]+1,cell[1]))
+                self.safes.add((cell[0]+1,cell[1]+1))
+
         # if the cell is in the top left corner
         if cell[0] == 0 and cell[1] == 0:
             self.knowledge.append(({(cell[0]+1,cell[1]),(cell[0]+1,cell[1]+1),(cell[0],cell[1]+1)},count))
+            if count == 0:
+                self.safes.add((cell[0]+1,cell[1]))
+                self.safes.add((cell[0]+1,cell[1]+1))
+                self.safes.add((cell[0],cell[1]+1))
 
         # if the cell is in the top right corner
         if cell[0] == 0 and cell[1] == self.width-1:
             self.knowledge.append(({(cell[0]+1,cell[1]),(cell[0]+1,cell[1]-1),(cell[0],cell[1]-1)},count))
+            if count == 0:
+                self.safes.add((cell[0]+1,cell[1]))
+                self.safes.add((cell[0]+1,cell[1]-1))
+                self.safes.add((cell[0],cell[1]-1))
 
         # if the cell is in the bottom left corner
         if cell[0] == self.height-1 and cell[1] == 0:
             self.knowledge.append(({(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]+1)},count))
+            if count == 0:
+                self.safes.add((cell[0]-1,cell[1]))
+                self.safes.add((cell[0]-1,cell[1]+1))
+                self.safes.add((cell[0],cell[1]+1))
 
         # if the cell is in the bottom right corner
         if cell[0] == self.height-1 and cell[1] == self.width-1:
             self.knowledge.append(({(cell[0],cell[1]-1),(cell[0]-1,cell[1]-1),(cell[0]-1,cell[1])},count))
+            if count == 0:
+                self.safes.add((cell[0],cell[1]-1))
+                self.safes.add((cell[0]-1,cell[1]-1))
+                self.safes.add((cell[0]-1,cell[1]))
 
         # if the cell is on the left border 
         if cell[1] == 0 and cell[0] != 0 and cell[0] != self.height-1:
             self.knowledge.append(({(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]+1),(cell[0]+1,cell[1]+1),(cell[0]+1,cell[1])},count))
+            if count == 0:
+                self.safes.add((cell[0]-1,cell[1]))
+                self.safes.add((cell[0]-1,cell[1]+1))
+                self.safes.add((cell[0],cell[1]+1))
+                self.safes.add((cell[0]+1,cell[1]+1))
+                self.safes.add((cell[0]+1,cell[1]))
 
          # if the cell is on the right border 
         if cell[1] == self.width-1 and cell[0] != 0 and cell[0] != self.height-1:
-            self.knowledge.append(({(cell[0]-1,cell[1]),(cell[0]-1,cell[1]-1),(cell[0],cell[1]-1),(cell[0]-1,cell[1]),(cell[0]+1,cell[1])},count))
+            self.knowledge.append(({(cell[0]-1,cell[1]),(cell[0]-1,cell[1]-1),(cell[0],cell[1]-1),(cell[0]+1,cell[1]-1),(cell[0]+1,cell[1])},count))
+            if count == 0:
+                self.safes.add((cell[0]-1,cell[1]))
+                self.safes.add((cell[0]-1,cell[1]-1))
+                self.safes.add((cell[0],cell[1]-1))
+                self.safes.add((cell[0]+1,cell[1]-1))
+                self.safes.add((cell[0]+1,cell[1]))
 
         # if the cell is on the top border 
         if cell[0] == 0 and cell[1] != self.width-1 and cell[1] != 0:
             self.knowledge.append(({(cell[0],cell[1]-1),(cell[0]+1,cell[1]-1),(cell[0]+1,cell[1]),(cell[0]+1,cell[1]+1),(cell[0],cell[1]+1)},count))
+            if count == 0:
+                self.safes.add((cell[0],cell[1]-1))
+                self.safes.add((cell[0]+1,cell[1]-1))
+                self.safes.add((cell[0]+1,cell[1]))
+                self.safes.add((cell[0]+1,cell[1]+1))
+                self.safes.add((cell[0],cell[1]+1))
 
         # if the cell is on the bottom border 
         if cell[0] == self.height-1 and cell[1] != 0 and cell[1] != self.width-1:
             self.knowledge.append(({(cell[0],cell[1]-1),(cell[0]-1,cell[1]-1),(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]+1)},count))
+            if count == 0:
+                self.safes.add((cell[0],cell[1]-1))
+                self.safes.add((cell[0]-1,cell[1]-1))
+                self.safes.add((cell[0]-1,cell[1]))
+                self.safes.add((cell[0]-1,cell[1]+1))
+                self.safes.add((cell[0],cell[1]+1))
+        
+        print('moves_made: ',self.moves_made)
+        print('mines: ',self.mines)
+        print('safes: ',self.safes)
+        print('knowledge: ',self.knowledge)
 
     def make_safe_move(self):
         """
@@ -187,7 +239,9 @@ class MinesweeperAI():
         print('mines: ',self.mines)
         print('safes: ',self.safes)
         print('knowledge: ',self.knowledge)
-        return (random.randint(0,self.height-1),random.randint(0,self.width-1))
+        for x in self.safes:
+            if x not in self.moves_made:
+                return x
 
     def make_random_move(self):
         """

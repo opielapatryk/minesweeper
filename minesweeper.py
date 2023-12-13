@@ -5,6 +5,11 @@
 #   sprawdz if KB and not A jest sprzeczne 
 #   jezeli jest sprzeczne => KB entails A
 #   else => no entailment 
+
+# gdy komórka zostanie oznaczona jako bezpieczna, to powinna zostać usunięta ze zbioru 
+# If cell is safe => remove this cell from knowledge
+# If move was made => remove this cell from knowledge
+
 import itertools
 import random
 import logic 
@@ -53,6 +58,7 @@ class Sentence():
         a cell is known to be a mine.
         """
         # remove cell from the set and decrease count by one 
+
         return self.cells(cell)
 
     def mark_safe(self, cell):
@@ -110,8 +116,12 @@ class MinesweeperAI():
         print('safes: ',self.safes)
         print('knowledge: ',self.knowledge)
         self.safes.add(cell)
-        for sentence in self.knowledge:
-            sentence.mark_safe(cell)
+        for sentence, (cells,count) in self.knowledge:
+            if cell in cells:
+                self.knowledge[sentence] = (cells-cell,count)
+        # Think why cell is not removed from knowledge if its safe
+        # - check if it is correctly marked as safe
+
 
     def add_knowledge(self, cell, count):
         """
@@ -250,10 +260,6 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        # print('moves_made: ',self.moves_made)
-        # print('mines: ',self.mines)
-        # print('safes: ',self.safes)
-        # print('knowledge: ',self.knowledge)
         while True:
             randmove = (random.randint(0,self.height-1),random.randint(0,self.width-1))
             print('randmove: ',randmove)

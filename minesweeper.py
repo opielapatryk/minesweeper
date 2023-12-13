@@ -108,21 +108,29 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
+        mines = set()
         for x in self.cells:
-            print(x)
-        return self.cells
+            # if cell = mine then return 
+            # if set items count is equal to count then all cells are mines 
+            mines.add(x)
+        return mines
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
-        return self.cells
+        safes = set()
+        for x in self.cells:
+            # if cell = safe then return 
+            safes.add(x)
+        return safes
 
     def mark_mine(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
+        # remove cell from the set and decrease count by one 
         return self.cells(cell)
 
     def mark_safe(self, cell):
@@ -130,6 +138,7 @@ class Sentence():
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
+        # remove cell from the set 
         return self.cells(cell)
 
 
@@ -265,8 +274,15 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        print('moves_made: ',self.moves_made)
-        print('mines: ',self.mines)
-        print('safes: ',self.safes)
-        print('knowledge: ',self.knowledge)
-        return self.knowledge[0][0]
+        # print('moves_made: ',self.moves_made)
+        # print('mines: ',self.mines)
+        # print('safes: ',self.safes)
+        # print('knowledge: ',self.knowledge)
+        while True:
+            randmove = (random.randint(0,self.height-1),random.randint(0,self.width-1))
+            print('randmove: ',randmove)
+            print('self.moves_made: ',self.moves_made)
+            print('self.safes: ',self.safes)
+            if randmove not in self.moves_made and randmove not in self.safes:
+                break
+        return randmove

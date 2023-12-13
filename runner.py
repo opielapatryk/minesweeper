@@ -2,7 +2,8 @@ import pygame
 import sys
 import time
 
-from minesweeper import Minesweeper, MinesweeperAI
+from minesweeper import MinesweeperAI
+from game import Minesweeper
 
 HEIGHT = 8
 WIDTH = 8

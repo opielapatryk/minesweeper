@@ -160,10 +160,10 @@ class MinesweeperAI():
         to mark that cell as a mine as well.
         """
         print('mark_mine cell: ', cell)
-        print(self.moves_made)
-        print(self.mines)
-        print(self.safes)
-        print(self.knowledge)
+        print('moves_made: ',self.moves_made)
+        print('mines: ',self.mines)
+        print('safes: ',self.safes)
+        print('knowledge: ',self.knowledge)
         self.mines.add(cell)
         for sentence in self.knowledge:
             sentence.mark_mine(cell)
@@ -174,10 +174,10 @@ class MinesweeperAI():
         to mark that cell as safe as well.
         """
         print('mark safe cell: ', cell)
-        print(self.moves_made)
-        print(self.mines)
-        print(self.safes)
-        print(self.knowledge)
+        print('moves_made: ',self.moves_made)
+        print('mines: ',self.mines)
+        print('safes: ',self.safes)
+        print('knowledge: ',self.knowledge)
         self.safes.add(cell)
         for sentence in self.knowledge:
             sentence.mark_safe(cell)
@@ -198,10 +198,10 @@ class MinesweeperAI():
                if they can be inferred from existing knowledge
         """
         print('add knowledge cell: ', cell)
-        print(self.moves_made)
-        print(self.mines)
-        print(self.safes)
-        print(self.knowledge)
+        print('moves_made: ',self.moves_made)
+        print('mines: ',self.mines)
+        print('safes: ',self.safes)
+        print('knowledge: ',self.knowledge)
         self.moves_made.add(cell)
         self.safes.add(cell)
         
@@ -242,7 +242,6 @@ class MinesweeperAI():
         # if the cell is on the bottom border 
         if cell[0] == self.height-1 and cell[1] != 0 and cell[1] != self.width-1:
             self.knowledge.append(({(cell[0],cell[1]-1),(cell[0]-1,cell[1]-1),(cell[0]-1,cell[1]),(cell[0]-1,cell[1]+1),(cell[0],cell[1]+1)},count))
-        return True
 
     def make_safe_move(self):
         """
@@ -253,11 +252,11 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        print(self.moves_made)
-        print(self.mines)
-        print(self.safes)
-        print(self.knowledge)
-        return True
+        print('moves_made: ',self.moves_made)
+        print('mines: ',self.mines)
+        print('safes: ',self.safes)
+        print('knowledge: ',self.knowledge)
+        return (random.randint(0,self.height-1),random.randint(0,self.width-1))
 
     def make_random_move(self):
         """
@@ -266,8 +265,8 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        print(self.moves_made)
-        print(self.mines)
-        print(self.safes)
-        print(self.knowledge)
-        return True
+        print('moves_made: ',self.moves_made)
+        print('mines: ',self.mines)
+        print('safes: ',self.safes)
+        print('knowledge: ',self.knowledge)
+        return self.knowledge[0][0]

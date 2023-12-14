@@ -102,25 +102,23 @@ class MinesweeperAI():
         print('safes: ',self.safes)
         print('knowledge: ',self.knowledge)
         self.mines.add(cell)
-        for sentence in self.knowledge:
-            sentence.mark_mine(cell)
+        print('MINES: ',self.mines)
+
+
 
     def mark_safe(self, cell):
         """
         Marks a cell as safe, and updates all knowledge
         to mark that cell as safe as well.
         """
-        print('mark safe cell: ', cell)
-        print('moves_made: ',self.moves_made)
-        print('mines: ',self.mines)
-        print('safes: ',self.safes)
-        print('knowledge: ',self.knowledge)
+        print('marked cell as safe: ', cell)
         self.safes.add(cell)
         for sentence, (cells,count) in self.knowledge:
             if cell in cells:
                 self.knowledge[sentence] = (cells-cell,count)
         # Think why cell is not removed from knowledge if its safe
-        # - check if it is correctly marked as safe
+        # - check if it is correctly marked as safe | YES, IT IS 
+                
 
 
     def add_knowledge(self, cell, count):
@@ -138,7 +136,6 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-
         # 1) mark the cell as a move that has been made
         self.moves_made.add(cell)
         # 2) mark the cell as safe
@@ -230,7 +227,75 @@ class MinesweeperAI():
                 self.safes.add((cell[0]-1,cell[1]))
                 self.safes.add((cell[0]-1,cell[1]+1))
                 self.safes.add((cell[0],cell[1]+1))
+
         
+        new_knowledge = []
+
+        for sentence in self.knowledge:
+            sets, count = sentence
+            new_set = set()
+            for pair in sets:
+                if pair not in self.safes:
+                    new_set.add(pair)
+            new_knowledge.append((new_set, count))
+
+        self.knowledge = new_knowledge
+                
+        for sentence in self.knowledge:
+            sets, count = sentence
+            if len(sets) == count:
+                for pair in sets:
+                    self.mark_mine(pair)
+        
+        # sentences with count equal to 1
+        count_one_sentences = []
+        for sentence in self.knowledge:
+            sets, count = sentence
+            if count == 1:
+                count_one_sentences.append(sentence)
+                self.knowledge.remove(sentence)
+        
+        # zbiory = [({(5, 3), (3, 3), (4, 3)}, 1), ({(5, 3), (4, 3)}, 1)] =
+        # = [({(5, 3), (4, 3)}, 1), ({(5, 3), (4, 3)}, 1)] = [({(5, 3), (4, 3)},1)]
+        # self.safes.add((3,3))
+        # jezeli zbior a jest podzbiorem jakiegos zbioru to obetnij roznice z wiekszego zbioru i dodaj ją do safes cells
+
+        #sets without count
+        one_count_sets = [] # [{(5, 3), (3, 3), (4, 3)},{(5, 3), (4, 3}]
+        for sentence in count_one_sentences:
+            sets, count = sentence
+            one_count_sets.append(sets)
+
+        # MUSZE DODAC DO SELF.KNOWLEDGE WSZYSTKIE SENTENCES WITH COUNT == 1 WITHOUT SAFES.CELLS
+        # ZANIM TO ZROBIE MUSZE STWORZYC (TUPLE Z SETÓW BEZ SAFE CELLS, COUNT == 1 )
+        set_of_safes = set()
+        addThisToKnwldg = []
+        for my_subset in one_count_sets:
+            for my_set in one_count_sets: 
+                if my_subset in my_set:
+                    for x in my_set:
+                        set_of_safes.add(x)
+                    for x in my_subset:
+                        set_of_safes.remove(x)
+            
+            addThisToKnwldg.append(my_subset)
+            addThisToKnwldg.append(1)
+            addThisToKnwldg = tuple(addThisToKnwldg)
+            if addThisToKnwldg not in self.knowledge:
+                self.knowledge.append(addThisToKnwldg)
+            addThisToKnwldg = []
+
+        for x in set_of_safes:
+            self.safes.add(x)
+                    
+        # remove item from knowledge if there is ({set()},0)
+
+        for sentence in self.knowledge:
+            my_set, count = sentence
+            if count == 0:
+                self.knowledge.remove(sentence)
+
+
         print('moves_made: ',self.moves_made)
         print('mines: ',self.mines)
         print('safes: ',self.safes)
@@ -265,6 +330,22 @@ class MinesweeperAI():
             print('randmove: ',randmove)
             print('self.moves_made: ',self.moves_made)
             print('self.safes: ',self.safes)
-            if randmove not in self.moves_made and randmove not in self.safes:
+            if randmove not in self.moves_made and randmove not in self.safes and randmove not in self.mines:
                 break
         return randmove
+
+# ({(6, 6), (6, 7), (5, 5), (6, 5)}, 3),
+# ({(5, 5), (6, 4), (6, 5), (6, 3)}, 2),
+# ({(0, 2), (1, 2), (2, 2)}, 2),
+# ({(6, 2), (6, 3), (6, 4)}, 1),
+# ({(6, 2), (7, 2)}, 1), ({(0, 7), (0, 5), (0, 6)}, 1),
+# ({(6, 6), (6, 7)}, 1), ({(0, 2), (1, 2)}, 1),
+# ({(0, 4), (0, 5), (0, 6)}, 1),
+# ({(6, 2), (6, 3)}, 1),
+# ({(0, 7), (0, 6)}, 1),
+# ({(0, 3), (1, 3), (0, 5), (0, 4)}, 1)
+# ({(5, 5)}, 1),
+# ({(6, 2)}, 1),
+# ({(1, 2), (1, 3), (2, 2)}, 3),
+# if sentence with smaller count is subset of sentence with larger count => remove sentence with smaller count
+# if there is a sentence which is known to contain the mines and is the substring of sentence with larger count => remove sentence with smaller count && remove substring from sentence with larger count && substract substring count from sentence with larger count

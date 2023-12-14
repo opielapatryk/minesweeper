@@ -334,18 +334,18 @@ class MinesweeperAI():
                 break
         return randmove
 
-# ({(6, 6), (6, 7), (5, 5), (6, 5)}, 3),
-# ({(5, 5), (6, 4), (6, 5), (6, 3)}, 2),
-# ({(0, 2), (1, 2), (2, 2)}, 2),
-# ({(6, 2), (6, 3), (6, 4)}, 1),
-# ({(6, 2), (7, 2)}, 1), ({(0, 7), (0, 5), (0, 6)}, 1),
-# ({(6, 6), (6, 7)}, 1), ({(0, 2), (1, 2)}, 1),
-# ({(0, 4), (0, 5), (0, 6)}, 1),
-# ({(6, 2), (6, 3)}, 1),
-# ({(0, 7), (0, 6)}, 1),
-# ({(0, 3), (1, 3), (0, 5), (0, 4)}, 1)
-# ({(5, 5)}, 1),
-# ({(6, 2)}, 1),
-# ({(1, 2), (1, 3), (2, 2)}, 3),
+({(6, 6), (6, 7), (5, 5), (6, 5)}, 3),
+({(5, 5), (6, 4), (6, 5), (6, 3)}, 2),
+({(0, 2), (1, 2), (2, 2)}, 2),
+({(6, 2), (6, 3), (6, 4)}, 1),
+({(6, 2), (7, 2)}, 1), ({(0, 7), (0, 5), (0, 6)}, 1),
+({(6, 6), (6, 7)}, 1), ({(0, 2), (1, 2)}, 1),
+({(0, 4), (0, 5), (0, 6)}, 1),
+({(6, 2), (6, 3)}, 1),
+({(0, 7), (0, 6)}, 1),
+({(0, 3), (1, 3), (0, 5), (0, 4)}, 1)
+({(5, 5)}, 1),
+({(6, 2)}, 1),
+({(1, 2), (1, 3), (2, 2)}, 3),
 # if sentence with smaller count is subset of sentence with larger count => remove sentence with smaller count
 # if there is a sentence which is known to contain the mines and is the substring of sentence with larger count => remove sentence with smaller count && remove substring from sentence with larger count && substract substring count from sentence with larger count

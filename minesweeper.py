@@ -1,15 +1,3 @@
-#https://cs50.harvard.edu/ai/2023/projects/1/minesweeper/
-#https://cs50.harvard.edu/ai/2023/notes/1/
-#https://www.youtube.com/watch?v=HWQLez87vqM
-# na podstawie knowledge udowodnij ze A === true
-#   sprawdz if KB and not A jest sprzeczne 
-#   jezeli jest sprzeczne => KB entails A
-#   else => no entailment 
-
-# gdy komórka zostanie oznaczona jako bezpieczna, to powinna zostać usunięta ze zbioru 
-# If cell is safe => remove this cell from knowledge
-# If move was made => remove this cell from knowledge
-
 import itertools
 import random
 import logic 
@@ -255,19 +243,12 @@ class MinesweeperAI():
                 count_one_sentences.append(sentence)
                 self.knowledge.remove(sentence)
         
-        # zbiory = [({(5, 3), (3, 3), (4, 3)}, 1), ({(5, 3), (4, 3)}, 1)] =
-        # = [({(5, 3), (4, 3)}, 1), ({(5, 3), (4, 3)}, 1)] = [({(5, 3), (4, 3)},1)]
-        # self.safes.add((3,3))
-        # jezeli zbior a jest podzbiorem jakiegos zbioru to obetnij roznice z wiekszego zbioru i dodaj ją do safes cells
-
         #sets without count
         one_count_sets = [] # [{(5, 3), (3, 3), (4, 3)},{(5, 3), (4, 3}]
         for sentence in count_one_sentences:
             sets, count = sentence
             one_count_sets.append(sets)
 
-        # MUSZE DODAC DO SELF.KNOWLEDGE WSZYSTKIE SENTENCES WITH COUNT == 1 WITHOUT SAFES.CELLS
-        # ZANIM TO ZROBIE MUSZE STWORZYC (TUPLE Z SETÓW BEZ SAFE CELLS, COUNT == 1 )
         set_of_safes = set()
         addThisToKnwldg = []
         for my_subset in one_count_sets:
